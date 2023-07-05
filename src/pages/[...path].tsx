@@ -14,7 +14,6 @@ const md = require("markdown-it")({
   html: true,
   linkify: true,
   typographer: true,
-  //   breaks: true,
 });
 
 const mk = require("markdown-it-katex");
@@ -24,8 +23,7 @@ const client = new ApolloClient({
   uri: env.WIKIJS_URL,
   cache: new InMemoryCache(),
   headers: {
-    Authorization:
-      "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGkiOjEsImdycCI6MywiaWF0IjoxNjg3ODIxMDM4LCJleHAiOjE2OTA0MTMwMzgsImF1ZCI6InVybjp3aWtpLmpzIiwiaXNzIjoidXJuOndpa2kuanMifQ.vI-IhIXkI1bmjisC-W5iSF-fCOgIPJVosUOLHyxTpIV6CpJ-hc0se5nQK1SG63V_eCNu_M0thiMJFZ0kIRUZrKFopecQc8miYMKaTa0VnY0v5xazL43Ur9zhh-4M9l_DwyNaohcsfYYjJhA6qpEr7KknSo87iWdWTIL2A5jO3O57hsduWlLBUUVS8CcJeMmB2jR3GMQgqHAV7cxykGlsOXK9EGwROc36kdyJeQ8usJ8Oc8-bP-_I_xLC6LUH_6YcL4LmKSbrRhX3osUouCpl_EzZXKAn1qcYSPicTq-ZIjKIqebUgF55vaZh5AwBpOSkdX_EL28JsbOvajXwxLPHfw",
+    Authorization: "Bearer " + env.WIKIJS_KEY,
   },
 });
 0;
