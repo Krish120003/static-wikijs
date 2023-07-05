@@ -6,7 +6,8 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@apollo/client": "^3.7.16",
@@ -15,6 +16,7 @@
     "markdown-it": "^13.0.1",
     "markdown-it-katex": "^2.0.3",
     "next": "^13.4.2",
+    "next-sitemap": "^4.1.8",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "zod": "^3.21.4"
