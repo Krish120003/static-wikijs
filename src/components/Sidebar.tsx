@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {
   normalizeUrl,
@@ -7,6 +7,7 @@ import {
   findImmediateChildren,
   getParent,
 } from "~/util/pathUtils";
+import Link from "next/link";
 
 interface NavLinkProps {
   to: string;
@@ -17,15 +18,18 @@ interface NavLinkProps {
 const NavLink: React.FC<NavLinkProps> = ({ to, updator, content }) => {
   if (updator === undefined) {
     return (
-      <a className="block w-full text-left" href={`${to}`}>
+      <Link
+        className="block w-full p-4 text-left hover:bg-neutral-100"
+        href={to}
+      >
         {content}
-      </a>
+      </Link>
     );
   }
 
   return (
     <button
-      className="block w-full text-left"
+      className="block w-full p-4 text-left hover:bg-neutral-100"
       onClick={() => {
         updator(to);
       }}
@@ -53,6 +57,16 @@ const Navbar: React.FC<NavProps> = (props) => {
     )
   );
 
+  useEffect(() => {
+    setNavPath(
+      normalizeUrl(
+        Array.isArray(router.query.path)
+          ? router.query.path.join("/")
+          : router.query.path || ""
+      )
+    );
+  }, [router.query.path]);
+
   const pagePaths = props.paths.map((e) => normalizeUrl(e.path));
 
   let children = [];
@@ -65,7 +79,9 @@ const Navbar: React.FC<NavProps> = (props) => {
 
   // match all the children with a title from the pages array
   const childrenWithTitles = children.map((child) => {
-    const page = props.paths.find((page) => page.path === child.to);
+    const page = props.paths.find(
+      (page) => normalizeUrl(page.path) === child.to
+    );
     if (page === undefined) {
       return { ...child, title: child.to };
     }
@@ -73,16 +89,17 @@ const Navbar: React.FC<NavProps> = (props) => {
   });
 
   return (
-    <aside className="max-h-screen overflow-scroll p-4">
+    <aside className="max-h-screen overflow-scroll">
       <ul>
         <li>
           <NavLink
             to={getParent(navPath)}
             updator={setNavPath}
-            content={getParent(navPath)}
+            content={"Back to " + getParent(navPath)}
           />
         </li>
         {childrenWithTitles.map((child) => {
+          console.log(child);
           return (
             <li className="block" key={child.to}>
               <NavLink
