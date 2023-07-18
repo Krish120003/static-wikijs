@@ -99,7 +99,6 @@ const Navbar: React.FC<NavProps> = (props) => {
           />
         </li>
         {childrenWithTitles.map((child) => {
-          console.log(child);
           return (
             <li className="block" key={child.to}>
               <NavLink
