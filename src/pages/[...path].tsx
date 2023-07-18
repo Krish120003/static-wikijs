@@ -4,11 +4,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { InferGetStaticPropsType } from "next";
 import { z } from "zod";
-import { env } from "~/env.mjs";
+import Sidebar from "~/components/Sidebar";
 import { PageResponse, pageSchema } from "~/util/queryTypes";
+import client from "~/util/wikiClient";
 
 const md = require("markdown-it")({
   html: true,
@@ -31,18 +32,10 @@ md.use(require("markdown-it-replace-link"), {
     return link;
   },
 });
+
 md.use(markdownItClass, {
   blockquote: "bg-blue-100 border-l-4 border-blue-500 rounded-xl px-4 py-1",
 });
-
-const client = new ApolloClient({
-  uri: env.WIKIJS_URL + "/graphql",
-  cache: new InMemoryCache(),
-  headers: {
-    Authorization: "Bearer " + env.WIKIJS_KEY,
-  },
-});
-0;
 
 const WikiPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = (
   props
@@ -50,8 +43,10 @@ const WikiPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = (
   const content = md.render(props.content);
 
   return (
-    <div className="grid w-full grid-cols-12 bg-red-400">
-      <div className="col-span-3 bg-neutral-200">a</div>
+    <div className="grid min-h-screen w-full grid-cols-12 bg-red-400">
+      <div className="col-span-3 bg-neutral-200">
+        <Sidebar />
+      </div>
       <div className="col-span-9 bg-neutral-100">
         <div className="prose col-span-full m-auto  py-8">
           <h1>{props.title}</h1>
