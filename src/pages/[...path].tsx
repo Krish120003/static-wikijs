@@ -8,6 +8,7 @@ import { gql } from "@apollo/client";
 import { InferGetStaticPropsType } from "next";
 import { z } from "zod";
 import Sidebar from "~/components/Sidebar";
+import { notNull } from "~/util/helpers";
 import { PageResponse, pageSchema } from "~/util/queryTypes";
 import { client, getAllPaths } from "~/util/wikiClient";
 
@@ -107,7 +108,7 @@ export async function getStaticProps({ params }: GetStaticParams) {
 
   const allPaths: { path: string; id: number; title: string }[] = (
     await getAllPaths()
-  ).filter((e) => e);
+  ).filter(notNull);
 
   return {
     props: {

@@ -37,7 +37,7 @@ export function findImmediateChildren(
 
   // remove the parent from the beginning of each path, and get just the next level
   const nextLevel = immediateChildren.map((path) => {
-    let parentAndChild = path.split("/").splice(0, numSlashes);
+    const parentAndChild = path.split("/").splice(0, numSlashes);
     return parentAndChild.join("/");
   });
 

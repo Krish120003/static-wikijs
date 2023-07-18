@@ -36,7 +36,11 @@ const NavLink: React.FC<NavLinkProps> = ({ to, updator, content }) => {
 };
 
 interface NavProps {
-  paths: string[];
+  paths: {
+    path: string;
+    title: string;
+    id: number;
+  }[];
 }
 
 const Navbar: React.FC<NavProps> = (props) => {
@@ -53,19 +57,11 @@ const Navbar: React.FC<NavProps> = (props) => {
 
   let children = [];
 
-  console.log(isPage(navPath, pagePaths), isFolder(navPath, pagePaths));
-
   if (isPage(navPath, pagePaths) && !isFolder(navPath, pagePaths)) {
-    console.log("Using parent!");
     children = findImmediateChildren(getParent(navPath), pagePaths);
   } else {
-    console.log("Using child!");
     children = findImmediateChildren(navPath, pagePaths);
   }
-
-  console.log("Currently on", navPath);
-  console.log("Children", children);
-  console.log("Parent", getParent(navPath));
 
   // match all the children with a title from the pages array
   const childrenWithTitles = children.map((child) => {
@@ -87,7 +83,6 @@ const Navbar: React.FC<NavProps> = (props) => {
           />
         </li>
         {childrenWithTitles.map((child) => {
-          console.log(child);
           return (
             <li className="block" key={child.to}>
               <NavLink
