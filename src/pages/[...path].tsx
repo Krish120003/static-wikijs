@@ -15,12 +15,28 @@ const md = require("markdown-it")({
   linkify: true,
   typographer: true,
 });
+const markdownItClass = require("@toycode/markdown-it-class");
 
 const mk = require("markdown-it-katex");
 md.use(mk);
+md.use(require("markdown-it-replace-link"), {
+  processHTML: true, // defaults to false for backwards compatibility
+  replaceLink: function (link: string, env: any, token: any, htmlToken: any) {
+    console.log(link);
+    if (link.startsWith("/images/")) {
+      const newL = `https://wiki.egirls.dev${link}`;
+      console.log(newL);
+      return newL;
+    }
+    return link;
+  },
+});
+md.use(markdownItClass, {
+  blockquote: "bg-blue-100 border-l-4 border-blue-500 rounded-xl px-4 py-1",
+});
 
 const client = new ApolloClient({
-  uri: env.WIKIJS_URL,
+  uri: env.WIKIJS_URL + "/graphql",
   cache: new InMemoryCache(),
   headers: {
     Authorization: "Bearer " + env.WIKIJS_KEY,
@@ -34,14 +50,19 @@ const WikiPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = (
   const content = md.render(props.content);
 
   return (
-    <div className="prose">
-      <h1>{props.title}</h1>
-      <p>{props.description}</p>
-      <br className="h-2 w-full border border-b-2 border-black bg-black" />
-      <article
-        className="prose m-auto"
-        dangerouslySetInnerHTML={{ __html: content }}
-      ></article>
+    <div className="grid w-full grid-cols-12 bg-red-400">
+      <div className="col-span-3 bg-neutral-200">a</div>
+      <div className="col-span-9 bg-neutral-100">
+        <div className="prose col-span-full m-auto  py-8">
+          <h1>{props.title}</h1>
+          <p>{props.description}</p>
+          <br className="h-2 w-full border border-b-2 border-black bg-black" />
+          <article
+            className="prose m-auto"
+            dangerouslySetInnerHTML={{ __html: content }}
+          ></article>
+        </div>
+      </div>
     </div>
   );
 };
