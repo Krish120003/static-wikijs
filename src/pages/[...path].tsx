@@ -9,7 +9,7 @@ import { InferGetStaticPropsType } from "next";
 import { z } from "zod";
 import Sidebar from "~/components/Sidebar";
 import { PageResponse, pageSchema } from "~/util/queryTypes";
-import client from "~/util/wikiClient";
+import { client, getAllPaths } from "~/util/wikiClient";
 
 const md = require("markdown-it")({
   html: true,
@@ -23,10 +23,9 @@ md.use(mk);
 md.use(require("markdown-it-replace-link"), {
   processHTML: true, // defaults to false for backwards compatibility
   replaceLink: function (link: string, env: any, token: any, htmlToken: any) {
-    console.log(link);
     if (link.startsWith("/images/")) {
       const newL = `https://wiki.egirls.dev${link}`;
-      console.log(newL);
+      // console.log(newL);
       return newL;
     }
     return link;
@@ -45,9 +44,9 @@ const WikiPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = (
   return (
     <div className="grid min-h-screen w-full grid-cols-12 bg-red-400">
       <div className="col-span-3 bg-neutral-200">
-        <Sidebar />
+        <Sidebar paths={props.allPaths} />
       </div>
-      <div className="col-span-9 bg-neutral-100">
+      <div className="col-span-9 max-h-screen overflow-scroll bg-neutral-100">
         <div className="prose col-span-full m-auto  py-8">
           <h1>{props.title}</h1>
           <p>{props.description}</p>
@@ -106,53 +105,27 @@ export async function getStaticProps({ params }: GetStaticParams) {
     throw new Error(JSON.stringify(res.errors));
   }
 
+  const allPaths: { path: string; id: number; title: string }[] = (
+    await getAllPaths()
+  ).filter((e) => e);
+
   return {
     props: {
       ...res.data.pages.singleByPath,
       path,
+      allPaths,
     },
   };
 }
 
 export async function getStaticPaths() {
-  const req = await client.query({
-    query: gql`
-      query QueryPages {
-        pages {
-          list {
-            id
-            path
-            title
-          }
-        }
-      }
-    `,
-  });
+  const res = await getAllPaths();
 
-  if (req.errors) {
-    console.error(req.errors);
-    throw new Error("Failed to fetch API");
-  }
-
-  const data = req.data as PageResponse<z.infer<typeof pageSchema>>;
-  if (!data) {
-    throw new Error("Failed to fetch API");
-  }
-
-  const paths = data.pages.list
-    .map((page) => {
-      const parsed = pageSchema.safeParse(page);
-      if (parsed.success) {
-        return parsed.data;
-      }
-      return null;
-    })
-    .filter((page) => page !== null)
-    .map((page) => ({
-      params: {
-        path: page?.path.split("/").filter((p) => p !== ""),
-      },
-    }));
+  const paths = res.map((page) => ({
+    params: {
+      path: page?.path.split("/").filter((p) => p !== ""),
+    },
+  }));
 
   return {
     paths,
