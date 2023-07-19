@@ -9,9 +9,6 @@ await import("./src/env.mjs");
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
-  basePath:
-    (process.env.NODE_ENV === "production" && process.env.DEPLOYMENT_URL) ||
-    "http://localhost:3000",
 };
 
 export default config;
