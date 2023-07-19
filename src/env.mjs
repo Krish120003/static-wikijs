@@ -30,8 +30,7 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     WIKIJS_URL: process.env.WIKIJS_URL,
     WIKIJS_KEY: process.env.WIKIJS_KEY,
-    NEXT_PUBLIC_DEPLOYMENT_URL:
-      process.env.DEPLOYMENT_URL || "http://localhost:3000",
+    NEXT_PUBLIC_DEPLOYMENT_URL: process.env.NEXT_PUBLIC_DEPLOYMENT_URL,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
