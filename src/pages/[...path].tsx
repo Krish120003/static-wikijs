@@ -45,6 +45,7 @@ const WikiPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = (
     <>
       <Head>
         <title>{props.title}</title>
+        <meta name="description" content={props.content} />
       </Head>
       <div className="grid min-h-screen w-full grid-cols-12 bg-red-400">
         <div className="col-span-3 bg-neutral-200">
