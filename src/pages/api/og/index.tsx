@@ -18,10 +18,14 @@ export default function handler(req: NextRequest) {
     });
   }
 
-  const title = searchParams.get("title")?.slice(0, 100);
-  const description = searchParams.get("description")?.slice(0, 300);
-  const lastUpdated = searchParams.get("lastUpdated")?.slice(0, 100);
-  const author = searchParams.get("author")?.slice(0, 100);
+  const title: string = hasTitle
+    ? (searchParams.get("title")?.slice(0, 100) as string)
+    : "";
+  const description: string =
+    searchParams.get("description")?.slice(0, 300) || "";
+  const lastUpdated: string =
+    searchParams.get("lastUpdated")?.slice(0, 100) || "";
+  const author: string = searchParams.get("author")?.slice(0, 100) || "";
 
   return new ImageResponse(
     (
