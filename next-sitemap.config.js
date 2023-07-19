@@ -4,6 +4,5 @@ module.exports = {
     (process.env.NODE_ENV === "production" && process.env.DEPLOYMENT_URL) ||
     "http://localhost:3000",
   generateRobotsTxt: true, // (optional)
-  outDir: "out/",
   // ...other options
 };
