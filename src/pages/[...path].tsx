@@ -6,11 +6,10 @@
 
 import { gql } from "@apollo/client";
 import { InferGetStaticPropsType } from "next";
-import { z } from "zod";
 import Sidebar from "~/components/Sidebar";
 import { notNull } from "~/util/helpers";
-import { PageResponse, pageSchema } from "~/util/queryTypes";
 import { client, getAllPaths } from "~/util/wikiClient";
+import Head from "next/head";
 
 const md = require("markdown-it")({
   html: true,
@@ -43,22 +42,27 @@ const WikiPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = (
   const content = md.render(props.content);
 
   return (
-    <div className="grid min-h-screen w-full grid-cols-12 bg-red-400">
-      <div className="col-span-3 bg-neutral-200">
-        <Sidebar paths={props.allPaths} />
-      </div>
-      <div className="col-span-9 max-h-screen overflow-scroll bg-neutral-100">
-        <div className="prose col-span-full m-auto  py-8">
-          <h1>{props.title}</h1>
-          <p>{props.description}</p>
-          <br className="h-2 w-full border border-b-2 border-black bg-black" />
-          <article
-            className="prose m-auto"
-            dangerouslySetInnerHTML={{ __html: content }}
-          ></article>
+    <>
+      <Head>
+        <title>{props.title}</title>
+      </Head>
+      <div className="grid min-h-screen w-full grid-cols-12 bg-red-400">
+        <div className="col-span-3 bg-neutral-200">
+          <Sidebar paths={props.allPaths} />
+        </div>
+        <div className="col-span-9 max-h-screen overflow-scroll bg-neutral-100">
+          <div className="prose col-span-full m-auto  py-8">
+            <h1>{props.title}</h1>
+            <p>{props.description}</p>
+            <br className="h-2 w-full border border-b-2 border-black bg-black" />
+            <article
+              className="prose m-auto"
+              dangerouslySetInnerHTML={{ __html: content }}
+            ></article>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
