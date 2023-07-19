@@ -48,10 +48,10 @@ const WikiPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = (
         <title>{props.title}</title>
         <meta name="description" content={props.content} />
         <meta property="og:title" content={props.title} />
-        <meta property="og:description" content={props.content} />
+        <meta property="og:description" content={props.description} />
         <meta
           property="og:image"
-          content={`${env.NEXT_PUBLIC_DEPLOYMENT_URL}/api/og/${props.path}`}
+          content={`${env.NEXT_PUBLIC_DEPLOYMENT_URL}/api/og?title=${props.title}&description=${props.description}`}
         />
       </Head>
       <div className="grid min-h-screen w-full grid-cols-12 bg-red-400">
